@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="期货市场仓位计算软件 - 根据账户余额、风险比例、入场价格、止损价格与交易单位自动计算最佳合约数量">
+  <title>期货市场仓位计算软件 | FUTURES MARKET TOOL</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <!-- 顶部标题区 -->
+    <header class="app-header">
+      <h1 class="app-title-en">FUTURES MARKET TOOL</h1>
+      <h2 class="app-title-zh">仓位计算软件</h2>
+      <p class="app-subtitle">输入交易参数，自动计算最佳合约数量与计划总风险</p>
+    </header>
+
+    <!-- 主体：桌面端左右布局，移动端上下布局 -->
+    <section class="app-body" aria-label="仓位计算器">
+      <!-- 左侧：交易参数输入区域 -->
+      <form id="calc-form" class="panel panel-input" novalidate>
+        <h3 class="panel-title">交易参数</h3>
+
+        <div class="field">
+          <label for="balance">账户余额</label>
+          <div class="input-wrap">
+            <input type="number" id="balance" min="0" step="any" value="50000" required>
+            <span class="unit">元</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="risk">风险比例</label>
+          <div class="input-wrap">
+            <input type="range" id="risk" min="0.5" max="10" step="0.5" value="2" aria-label="风险比例滑块">
+            <span class="unit risk-value" id="risk-value">2%</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="entry">入场价格</label>
+          <div class="input-wrap">
+            <input type="number" id="entry" min="0" step="any" value="3250" required>
+            <span class="unit">元/吨</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="stop">止损价格</label>
+          <div class="input-wrap">
+            <input type="number" id="stop" min="0" step="any" value="3230" required>
+            <span class="unit">元/吨</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="units">每手交易单位</label>
+          <div class="input-wrap">
+            <input type="number" id="units" min="0" step="any" value="10" required>
+            <span class="unit">吨/手</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-calc">自动计算</button>
+      </form>
+
+      <!-- 右侧：计算结果区域 -->
+      <section class="panel panel-result" aria-label="计算结果">
+        <h3 class="panel-title">计算结果</h3>
+        <div id="error-box" class="error-box" hidden></div>
+        <div id="result-box" class="result-box">
+          <div class="result-item result-primary">
+            <span class="result-label">最佳合约数量</span>
+            <span class="result-value" id="result-lots">--</span>
+            <span class="result-unit">手</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">最大风险金额</span>
+            <span class="result-value" id="result-max-risk">--</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">每手预计亏损</span>
+            <span class="result-value" id="result-per-lot">--</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">计划总风险</span>
+            <span class="result-value" id="result-total-risk">--</span>
+          </div>
+          <p id="risk-warning" class="risk-warning" hidden></p>
+        </div>
+      </section>
+    </section>
+
+    <!-- 底部免责声明 -->
+    <footer class="app-footer">
+      <p>本工具仅用于仓位测算，不构成投资建议。实际交易还需要考虑手续费、滑点、涨跌停板、保证金和市场流动性等因素。</p>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
