@@ -1,0 +1,261 @@
+/* ============================================================
+   FUTURES MARKET TOOL - 期货市场仓位计算软件
+   紫色背景 + 金色标题 + 白色面板；响应式：桌面左右布局 / 移动上下布局
+   ============================================================ */
+
+:root {
+  --bg-gradient-start: #2b0a4d;
+  --bg-gradient-end: #5b2a86;
+  --gold: #d4af37;
+  --gold-light: #f0d97a;
+  --panel-bg: #ffffff;
+  --text-main: #2d2d2d;
+  --text-muted: #7a7a8c;
+  --border: #e3e3ee;
+  --danger: #d64545;
+  --danger-bg: #fdecec;
+  --warn: #b8860b;
+  --warn-bg: #fdf6e3;
+  --accent: #6c2fa3;
+  --radius: 14px;
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  color: var(--text-main);
+}
+
+.app {
+  width: 100%;
+  max-width: 920px;
+}
+
+/* ---------- 顶部标题 ---------- */
+.app-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.app-title-en {
+  color: var(--gold);
+  font-size: 1.1rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.app-title-zh {
+  color: var(--gold-light);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.app-subtitle {
+  color: #d8c8f0;
+  font-size: 0.95rem;
+}
+
+/* ---------- 主体布局：桌面左右 / 移动上下 ---------- */
+.app-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: stretch;
+}
+
+@media (max-width: 720px) {
+  .app-body {
+    grid-template-columns: 1fr; /* 移动端改为上下布局 */
+  }
+}
+
+/* ---------- 白色面板 ---------- */
+.panel {
+  background: var(--panel-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.panel-title {
+  color: var(--accent);
+  font-size: 1.05rem;
+  font-weight: 700;
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 10px;
+  margin-bottom: 18px;
+}
+
+/* ---------- 输入字段 ---------- */
+.field {
+  margin-bottom: 16px;
+}
+
+.field label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-wrap input[type="number"] {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-wrap input[type="number"]:focus {
+  border-color: var(--accent);
+}
+
+/* 滑块样式 */
+.input-wrap input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.unit {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  min-width: 48px;
+  text-align: right;
+}
+
+.risk-value {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* ---------- 自动计算按钮 ---------- */
+.btn-calc {
+  width: 100%;
+  padding: 13px 16px;
+  margin-top: 6px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--gold) 0%, #c89b2e 100%);
+  color: #3a2a05;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn-calc:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(212, 175, 55, 0.45);
+}
+
+.btn-calc:active {
+  transform: translateY(0);
+}
+
+/* ---------- 结果区域 ---------- */
+.result-box {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.result-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: #f7f4fe;
+  border-radius: 8px;
+  border-left: 4px solid var(--accent);
+}
+
+.result-primary {
+  border-left-color: var(--gold);
+  background: #fbf6e8;
+}
+
+.result-label {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+
+.result-value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.result-primary .result-value {
+  font-size: 1.8rem;
+  color: var(--gold);
+}
+
+.result-unit {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+/* ---------- 错误与风险提示 ---------- */
+.error-box {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid #f0b7b7;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 0.92rem;
+  margin-bottom: 16px;
+}
+
+.risk-warning {
+  background: var(--warn-bg);
+  color: var(--warn);
+  border: 1px solid #e6cf8f;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+}
+
+/* ---------- 底部免责声明 ---------- */
+.app-footer {
+  margin-top: 20px;
+  text-align: center;
+  color: #cbb9e6;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  padding: 0 8px;
+}
