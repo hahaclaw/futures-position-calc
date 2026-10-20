@@ -312,6 +312,7 @@
     priceUnit.textContent = p.priceUnit;
     valueWrap.appendChild(priceUnit);
 
+    grid.appendChild(priceCell);
     grid.appendChild(buildItem("每手合约价值", "", "qc-money"));
     grid.appendChild(buildItem("一手保证金估算", "", "qc-money qc-margin-val"));
 
