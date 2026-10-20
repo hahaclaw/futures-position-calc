@@ -259,3 +259,162 @@ body {
   line-height: 1.6;
   padding: 0 8px;
 }
+
+/* ============================================================
+   品种速查模块
+   紫色/金色风格与主面板保持一致
+   ============================================================ */
+.quick-panel {
+  margin-top: 20px;
+}
+
+.quick-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+.quick-search {
+  margin-bottom: 4px;
+}
+
+#quick-input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#quick-input:focus {
+  border-color: var(--accent);
+}
+
+.btn-quick {
+  flex-shrink: 0;
+  width: auto;
+  margin-top: 0;
+  padding: 10px 26px;
+  letter-spacing: 1px;
+}
+
+.quick-results {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+/* 单个品种结果卡片 */
+.quick-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: #fbfafd;
+}
+
+.quick-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.quick-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.quick-exch {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 16px;
+}
+
+@media (max-width: 560px) {
+  .quick-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.qc-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  gap: 8px;
+}
+
+.qc-label {
+  flex-shrink: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.qc-value {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.qc-money {
+  color: var(--gold);
+}
+
+.qc-margin-val {
+  color: var(--danger);
+}
+
+.qc-price {
+  width: 108px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: right;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.qc-price:focus {
+  border-color: var(--gold);
+}
+
+.qc-unit {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: 2px;
+  white-space: nowrap;
+}
+
+.qc-note {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--warn);
+}
+
+.quick-hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-top: 10px;
+}
