@@ -89,9 +89,24 @@
       </section>
     </section>
 
+    <!-- 品种速查 -->
+    <section class="panel quick-panel" aria-label="品种速查">
+      <h3 class="panel-title">品种速查</h3>
+      <p class="quick-desc">输入品种名称或文华代码（如"螺纹钢"、"rb"），自动匹配交易所与一手保证金估算。支持模糊匹配、大小写不敏感。</p>
+      <div class="quick-search">
+        <div class="input-wrap">
+          <input type="text" id="quick-input" placeholder="请输入品种名称或代码，如：螺纹钢 / rb / RB" autocomplete="off">
+          <button type="button" id="quick-btn" class="btn-calc btn-quick">查询</button>
+        </div>
+      </div>
+      <div id="quick-error" class="error-box" hidden></div>
+      <div id="quick-results" class="quick-results"></div>
+      <p class="quick-hint">保证金估算 = 参考价格 × 交易单位 × 交易所基准保证金比例。参考价格可编辑，修改后自动实时重算。</p>
+    </section>
+
     <!-- 底部免责声明 -->
     <footer class="app-footer">
-      <p>本工具仅用于仓位测算，不构成投资建议。实际交易还需要考虑手续费、滑点、涨跌停板、保证金和市场流动性等因素。</p>
+      <p>本工具仅用于仓位测算，不构成投资建议。实际交易还需要考虑手续费、滑点、涨跌停板、保证金和市场流动性等因素。品种交易单位与保证金比例为交易所公开标准（参考 2026 年各交易所/期货公司公示数据），参考价格为主力合约估算价，实际以当日盘面与期货公司为准。</p>
     </footer>
   </main>
 
