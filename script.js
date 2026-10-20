@@ -140,4 +140,234 @@
 
   // 页面首次打开时自动显示计算结果（默认参数应算出 5 手）
   runCalculation();
+
+  // ============================================================
+  // 品种速查功能
+  // 内置品种数据库：交易单位与保证金比例参考 2026 年各交易所/期货公司公示数据
+  // ============================================================
+  var PROD_DB = [
+    // ---- 上期所（上海期货交易所） ----
+    { name: '螺纹钢', code: 'rb', exchange: '上海', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 3300, note: '' },
+    { name: '热卷', code: 'hc', exchange: '上海', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 3400, note: '' },
+    { name: '铜', code: 'cu', exchange: '上海', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.09, refPrice: 76000, note: '' },
+    { name: '铝', code: 'al', exchange: '上海', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.09, refPrice: 20000, note: '' },
+    { name: '锌', code: 'zn', exchange: '上海', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.09, refPrice: 24000, note: '' },
+    { name: '铅', code: 'pb', exchange: '上海', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.09, refPrice: 16500, note: '' },
+    { name: '镍', code: 'ni', exchange: '上海', unitText: '1吨/手', unitNum: 1, unitName: '吨', priceUnit: '元/吨', margin: 0.10, refPrice: 120000, note: '' },
+    { name: '锡', code: 'sn', exchange: '上海', unitText: '1吨/手', unitNum: 1, unitName: '吨', priceUnit: '元/吨', margin: 0.10, refPrice: 250000, note: '' },
+    { name: '黄金', code: 'au', exchange: '上海', unitText: '1000克/手', unitNum: 1000, unitName: '克', priceUnit: '元/克', margin: 0.16, refPrice: 610, note: '' },
+    { name: '白银', code: 'ag', exchange: '上海', unitText: '15千克/手', unitNum: 15, unitName: '千克', priceUnit: '元/千克', margin: 0.16, refPrice: 7300, note: '' },
+    { name: '橡胶', code: 'ru', exchange: '上海', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.09, refPrice: 14000, note: '' },
+    { name: '沥青', code: 'bu', exchange: '上海', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.09, refPrice: 3300, note: '' },
+    { name: '燃料油', code: 'fu', exchange: '上海', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.09, refPrice: 3000, note: '' },
+    { name: '纸浆', code: 'sp', exchange: '上海', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 5600, note: '' },
+    { name: '不锈钢', code: 'ss', exchange: '上海', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 13500, note: '' },
+    { name: '氧化铝', code: 'ao', exchange: '上海', unitText: '20吨/手', unitNum: 20, unitName: '吨', priceUnit: '元/吨', margin: 0.09, refPrice: 4800, note: '' },
+    // ---- 能源中心（上海国际能源交易中心） ----
+    { name: '原油', code: 'sc', exchange: '能源', unitText: '1000桶/手', unitNum: 1000, unitName: '桶', priceUnit: '元/桶', margin: 0.09, refPrice: 520, note: '' },
+    { name: '20号胶', code: 'nr', exchange: '能源', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.09, refPrice: 11500, note: '' },
+    { name: '低硫燃料油', code: 'lu', exchange: '能源', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.09, refPrice: 3900, note: '' },
+    // ---- 广期所（广州期货交易所） ----
+    { name: '碳酸锂', code: 'lc', exchange: '广州', unitText: '1吨/手', unitNum: 1, unitName: '吨', priceUnit: '元/吨', margin: 0.11, refPrice: 70000, note: '' },
+    { name: '工业硅', code: 'si', exchange: '广州', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.10, refPrice: 11000, note: '' },
+    { name: '多晶硅', code: 'ps', exchange: '广州', unitText: '3吨/手', unitNum: 3, unitName: '吨', priceUnit: '元/吨', margin: 0.15, refPrice: 40000, note: '' },
+    // ---- 大商所（大连商品交易所） ----
+    { name: '豆粕', code: 'm', exchange: '大连', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 3000, note: '' },
+    { name: '豆油', code: 'y', exchange: '大连', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 7700, note: '' },
+    { name: '棕榈油', code: 'p', exchange: '大连', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.08, refPrice: 8500, note: '' },
+    { name: '豆一', code: 'a', exchange: '大连', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 4300, note: '' },
+    { name: '豆二', code: 'b', exchange: '大连', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 4100, note: '' },
+    { name: '玉米', code: 'c', exchange: '大连', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 2250, note: '' },
+    { name: '玉米淀粉', code: 'cs', exchange: '大连', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.06, refPrice: 2650, note: '' },
+    { name: '鸡蛋', code: 'jd', exchange: '大连', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 4300, note: '报价为元/500千克，此处按吨近似折算' },
+    { name: '生猪', code: 'lh', exchange: '大连', unitText: '16吨/手', unitNum: 16, unitName: '吨', priceUnit: '元/吨', margin: 0.08, refPrice: 15000, note: '' },
+    { name: '铁矿石', code: 'i', exchange: '大连', unitText: '100吨/手', unitNum: 100, unitName: '吨', priceUnit: '元/吨', margin: 0.11, refPrice: 780, note: '' },
+    { name: '焦炭', code: 'j', exchange: '大连', unitText: '100吨/手', unitNum: 100, unitName: '吨', priceUnit: '元/吨', margin: 0.20, refPrice: 1900, note: '' },
+    { name: '焦煤', code: 'jm', exchange: '大连', unitText: '60吨/手', unitNum: 60, unitName: '吨', priceUnit: '元/吨', margin: 0.12, refPrice: 1350, note: '' },
+    { name: '聚乙烯', code: 'l', exchange: '大连', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 8100, note: '' },
+    { name: '聚氯乙烯', code: 'v', exchange: '大连', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 5700, note: '' },
+    { name: '聚丙烯', code: 'pp', exchange: '大连', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 7400, note: '' },
+    { name: '乙二醇', code: 'eg', exchange: '大连', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 4600, note: '' },
+    { name: '苯乙烯', code: 'eb', exchange: '大连', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 8200, note: '' },
+    { name: '液化石油气', code: 'pg', exchange: '大连', unitText: '20吨/手', unitNum: 20, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 4700, note: '' },
+    { name: '原木', code: 'lg', exchange: '大连', unitText: '90立方米/手', unitNum: 90, unitName: '立方米', priceUnit: '元/立方米', margin: 0.08, refPrice: 900, note: '' },
+    // ---- 郑商所（郑州商品交易所） ----
+    { name: '白糖', code: 'sr', exchange: '郑州', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.06, refPrice: 6000, note: '' },
+    { name: '棉花', code: 'cf', exchange: '郑州', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 14000, note: '' },
+    { name: '菜粕', code: 'rm', exchange: '郑州', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 2400, note: '' },
+    { name: '菜油', code: 'oi', exchange: '郑州', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 9300, note: '' },
+    { name: 'PTA', code: 'ta', exchange: '郑州', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 4800, note: '' },
+    { name: '甲醇', code: 'ma', exchange: '郑州', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 2400, note: '' },
+    { name: '玻璃', code: 'fg', exchange: '郑州', unitText: '20吨/手', unitNum: 20, unitName: '吨', priceUnit: '元/吨', margin: 0.10, refPrice: 1150, note: '' },
+    { name: '纯碱', code: 'sa', exchange: '郑州', unitText: '20吨/手', unitNum: 20, unitName: '吨', priceUnit: '元/吨', margin: 0.09, refPrice: 2100, note: '' },
+    { name: '尿素', code: 'ur', exchange: '郑州', unitText: '20吨/手', unitNum: 20, unitName: '吨', priceUnit: '元/吨', margin: 0.08, refPrice: 1750, note: '' },
+    { name: '短纤', code: 'pf', exchange: '郑州', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 6800, note: '' },
+    { name: '苹果', code: 'ap', exchange: '郑州', unitText: '10吨/手', unitNum: 10, unitName: '吨', priceUnit: '元/吨', margin: 0.10, refPrice: 7600, note: '' },
+    { name: '红枣', code: 'cj', exchange: '郑州', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.09, refPrice: 10000, note: '' },
+    { name: '花生', code: 'pk', exchange: '郑州', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.07, refPrice: 8300, note: '' },
+    { name: '烧碱', code: 'sh', exchange: '郑州', unitText: '30吨/手', unitNum: 30, unitName: '吨', priceUnit: '元/吨', margin: 0.08, refPrice: 2800, note: '' },
+    { name: '硅铁', code: 'sf', exchange: '郑州', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.08, refPrice: 6400, note: '' },
+    { name: '锰硅', code: 'sm', exchange: '郑州', unitText: '5吨/手', unitNum: 5, unitName: '吨', priceUnit: '元/吨', margin: 0.09, refPrice: 6600, note: '' },
+    // ---- 中金所（中国金融期货交易所） ----
+    { name: '沪深300', code: 'if', exchange: '中金所', unitText: '300元/点', unitNum: 300, unitName: '点', priceUnit: '点', margin: 0.12, refPrice: 3900, note: '' },
+    { name: '中证500', code: 'ic', exchange: '中金所', unitText: '200元/点', unitNum: 200, unitName: '点', priceUnit: '点', margin: 0.12, refPrice: 5800, note: '' },
+    { name: '中证1000', code: 'im', exchange: '中金所', unitText: '200元/点', unitNum: 200, unitName: '点', priceUnit: '点', margin: 0.12, refPrice: 6300, note: '' },
+    { name: '上证50', code: 'ih', exchange: '中金所', unitText: '300元/点', unitNum: 300, unitName: '点', priceUnit: '点', margin: 0.12, refPrice: 2700, note: '' },
+    { name: '10年期国债', code: 't', exchange: '中金所', unitText: '10000元/点', unitNum: 10000, unitName: '元', priceUnit: '元', margin: 0.02, refPrice: 108, note: '' }
+  ];
+
+  /** 交易所简称 -> 完整名称 */
+  var EXCHANGE_FULL = {
+    '上海': '上海期货交易所',
+    '能源': '上海国际能源交易中心',
+    '广州': '广州期货交易所',
+    '大连': '大连商品交易所',
+    '郑州': '郑州商品交易所',
+    '中金所': '中国金融期货交易所'
+  };
+
+  var quickInput = document.getElementById("quick-input");
+  var quickBtn = document.getElementById("quick-btn");
+  var quickError = document.getElementById("quick-error");
+  var quickResults = document.getElementById("quick-results");
+
+  /**
+   * 品种匹配：支持中文名/文华代码包含匹配，大小写不敏感；精确匹配优先。
+   */
+  function matchProducts(keyword) {
+    var k = keyword.trim().toLowerCase();
+    if (!k) return [];
+    var exact = PROD_DB.filter(function (p) {
+      return p.code === k || p.name === keyword.trim();
+    });
+    if (exact.length > 0) return exact;
+    return PROD_DB.filter(function (p) {
+      return p.name.toLowerCase().indexOf(k) !== -1 || p.code.indexOf(k) !== -1;
+    });
+  }
+
+  /** 构造单字段条目 */
+  function buildItem(label, value, cls) {
+    var item = document.createElement("div");
+    item.className = "qc-item";
+    var l = document.createElement("span");
+    l.className = "qc-label";
+    l.textContent = label;
+    var v = document.createElement("span");
+    v.className = "qc-value" + (cls ? " " + cls : "");
+    v.textContent = value;
+    item.appendChild(l);
+    item.appendChild(v);
+    return item;
+  }
+
+  /** 根据卡片内参考价格实时重算合约价值与一手保证金 */
+  function updateProductValues(card, p) {
+    var price = parseFloat(card.querySelector(".qc-price").value);
+    if (isNaN(price) || price <= 0) price = p.refPrice;
+    var contractValue = price * p.unitNum;
+    var margin = contractValue * p.margin;
+    var moneyEls = card.querySelectorAll(".qc-money");
+    moneyEls[0].textContent = formatCurrency(contractValue);
+    moneyEls[1].textContent = formatCurrency(margin);
+  }
+
+  /** 渲染单个品种卡片 */
+  function renderProductCard(p) {
+    var card = document.createElement("div");
+    card.className = "quick-card";
+
+    // 表头：名称 + 代码 + 交易所
+    var head = document.createElement("div");
+    head.className = "quick-card-head";
+    var name = document.createElement("span");
+    name.className = "quick-name";
+    name.textContent = p.name + " " + p.code.toUpperCase();
+    var exch = document.createElement("span");
+    exch.className = "quick-exch";
+    exch.textContent = EXCHANGE_FULL[p.exchange] || p.exchange;
+    head.appendChild(name);
+    head.appendChild(exch);
+    card.appendChild(head);
+
+    // 信息网格
+    var grid = document.createElement("div");
+    grid.className = "quick-grid";
+
+    grid.appendChild(buildItem("交易单位", p.unitText, ""));
+
+    // 参考价格（可编辑）
+    var priceCell = buildItem("参考价格", "", "");
+    var valueWrap = priceCell.querySelector(".qc-value");
+    valueWrap.textContent = "";
+    var priceInput = document.createElement("input");
+    priceInput.type = "number";
+    priceInput.className = "qc-price";
+    priceInput.step = "any";
+    priceInput.min = "0";
+    priceInput.value = p.refPrice;
+    valueWrap.appendChild(priceInput);
+    var priceUnit = document.createElement("span");
+    priceUnit.className = "qc-unit";
+    priceUnit.textContent = p.priceUnit;
+    valueWrap.appendChild(priceUnit);
+
+    grid.appendChild(buildItem("每手合约价值", "", "qc-money"));
+    grid.appendChild(buildItem("一手保证金估算", "", "qc-money qc-margin-val"));
+
+    card.appendChild(grid);
+
+    // 特殊标注
+    if (p.note) {
+      var note = document.createElement("div");
+      note.className = "qc-note";
+      note.textContent = p.note;
+      card.appendChild(note);
+    }
+
+    // 价格变化实时重算
+    priceInput.addEventListener("input", function () {
+      updateProductValues(card, p);
+    });
+
+    updateProductValues(card, p);
+    return card;
+  }
+
+  /** 执行查询并渲染结果 */
+  function runQuickSearch() {
+    var products = matchProducts(quickInput.value);
+    quickResults.innerHTML = "";
+    quickError.hidden = true;
+
+    if (products.length === 0) {
+      quickError.textContent = "未找到该品种，请检查名称或代码";
+      quickError.hidden = false;
+      return;
+    }
+
+    var shown = products.slice(0, 20);
+    shown.forEach(function (p) {
+      quickResults.appendChild(renderProductCard(p));
+    });
+
+    if (products.length > 20) {
+      var tip = document.createElement("p");
+      tip.className = "quick-hint";
+      tip.textContent = "匹配品种较多（共 " + products.length + " 个），已展示前 20 个，请细化关键词。";
+      quickResults.appendChild(tip);
+    }
+  }
+
+  quickBtn.addEventListener("click", runQuickSearch);
+  quickInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      runQuickSearch();
+    }
+  });
+
+  // 页面首次展示：默认查询"螺纹钢"
+  quickInput.value = "螺纹钢";
+  runQuickSearch();
 })();
