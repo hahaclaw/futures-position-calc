@@ -24,6 +24,8 @@
   var resultBox = document.getElementById("result-box");
   var lotsEl = document.getElementById("result-lots");
   var maxRiskEl = document.getElementById("result-max-risk");
+  var highEl = document.getElementById("result-high");
+  var lowEl = document.getElementById("result-low");
   var perLotEl = document.getElementById("result-per-lot");
   var totalRiskEl = document.getElementById("result-total-risk");
   var warningEl = document.getElementById("risk-warning");
@@ -62,10 +64,15 @@
    */
   function calculate(balance, risk, entry, stop, units) {
     var maxRisk = balance * risk / 100;                 // 最大风险金额（元）
-    var perLotLoss = Math.abs(entry - stop) * units;    // 每手预计亏损（元）
+    // 规定：最高点/最低点为入场价与止损价中的较大者/较小者
+    // 入场价高于止损价 → 最高点=入场价、最低点=止损价
+    // 入场价低于止损价 → 最高点=止损价、最低点=入场价
+    var high = Math.max(entry, stop);                   // 最高点
+    var low = Math.min(entry, stop);                    // 最低点
+    var perLotLoss = (high - low) * units;              // 每手预计亏损（元）
     var lots = Math.floor(maxRisk / perLotLoss);        // 最佳合约数量（向下取整）
     var totalRisk = lots * perLotLoss;                  // 计划总风险（元）
-    return { maxRisk: maxRisk, perLotLoss: perLotLoss, lots: lots, totalRisk: totalRisk };
+    return { maxRisk: maxRisk, high: high, low: low, perLotLoss: perLotLoss, lots: lots, totalRisk: totalRisk };
   }
 
   /** 人民币格式化：¥1,000.00 */
@@ -105,6 +112,8 @@
     // 3. 渲染
     lotsEl.textContent = result.lots;
     maxRiskEl.textContent = formatCurrency(result.maxRisk);
+    highEl.textContent = result.high;
+    lowEl.textContent = result.low;
     perLotEl.textContent = formatCurrency(result.perLotLoss);
     totalRiskEl.textContent = formatCurrency(result.totalRisk);
     resultBox.hidden = false;
