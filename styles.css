@@ -418,3 +418,29 @@ body {
   line-height: 1.6;
   margin-top: 10px;
 }
+
+/* ---------- 输入框清除按钮 ---------- */
+.clear-btn {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: #e8e2f5;
+  color: var(--accent);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.clear-btn:hover {
+  background: #d9cff0;
+}
+
+.clear-btn:active {
+  transform: scale(0.9);
+}

@@ -233,6 +233,8 @@
 
   /**
    * 品种匹配：支持中文名/文华代码包含匹配，大小写不敏感；精确匹配优先。
+   * 若按原输入无结果，剥离输入末尾的数字尾缀（含空格）后重试，
+   * 以兼容带合约月份后缀的输入，如"乙二醇2611"→"乙二醇"、"eg2611"→"eg"。
    */
   function matchProducts(keyword) {
     var k = keyword.trim().toLowerCase();
@@ -241,9 +243,18 @@
       return p.code === k || p.name === keyword.trim();
     });
     if (exact.length > 0) return exact;
-    return PROD_DB.filter(function (p) {
+    var contains = PROD_DB.filter(function (p) {
       return p.name.toLowerCase().indexOf(k) !== -1 || p.code.indexOf(k) !== -1;
     });
+    if (contains.length > 0) return contains;
+    // 剥离输入末尾的数字尾缀（含空格后继续剥离）再匹配
+    var stripped = keyword.trim().replace(/[\d\s]+$/, "").trim().toLowerCase();
+    if (stripped && stripped !== k) {
+      return PROD_DB.filter(function (p) {
+        return p.name.toLowerCase().indexOf(stripped) !== -1 || p.code.indexOf(stripped) !== -1;
+      });
+    }
+    return [];
   }
 
   /** 构造单字段条目 */
@@ -371,4 +382,35 @@
   // 页面首次展示：默认查询"螺纹钢"
   quickInput.value = "螺纹钢";
   runQuickSearch();
+
+  // ---------- 输入框清除按钮 ----------
+  function clearQuickResults() {
+    quickResults.innerHTML = "";
+    quickError.hidden = true;
+  }
+
+  [balanceInput, entryInput, stopInput, unitsInput, quickInput].forEach(function (input) {
+    var clearBtn = input.parentNode.querySelector(".clear-btn");
+    if (!clearBtn) return;
+
+    function syncClearBtn() {
+      clearBtn.hidden = input.value.trim() === "";
+    }
+
+    input.addEventListener("input", syncClearBtn);
+
+    clearBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      input.value = "";
+      syncClearBtn();
+      if (input === quickInput) {
+        clearQuickResults();
+      } else {
+        runCalculation();
+      }
+      input.focus();
+    });
+
+    syncClearBtn();
+  });
 })();

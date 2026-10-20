@@ -26,6 +26,7 @@
           <label for="balance">账户余额</label>
           <div class="input-wrap">
             <input type="number" id="balance" min="0" step="any" value="50000" required>
+            <button type="button" class="clear-btn" data-clear="balance" aria-label="清除账户余额" hidden>×</button>
             <span class="unit">元</span>
           </div>
         </div>
@@ -42,6 +43,7 @@
           <label for="entry">入场价格</label>
           <div class="input-wrap">
             <input type="number" id="entry" min="0" step="any" value="3250" required>
+            <button type="button" class="clear-btn" data-clear="entry" aria-label="清除入场价格" hidden>×</button>
           </div>
         </div>
 
@@ -49,6 +51,7 @@
           <label for="stop">止损价格</label>
           <div class="input-wrap">
             <input type="number" id="stop" min="0" step="any" value="3230" required>
+            <button type="button" class="clear-btn" data-clear="stop" aria-label="清除止损价格" hidden>×</button>
           </div>
         </div>
 
@@ -56,6 +59,7 @@
           <label for="units">每手交易单位</label>
           <div class="input-wrap">
             <input type="number" id="units" min="0" step="any" value="10" required>
+            <button type="button" class="clear-btn" data-clear="units" aria-label="清除每手交易单位" hidden>×</button>
           </div>
         </div>
 
@@ -96,6 +100,7 @@
       <div class="quick-search">
         <div class="input-wrap">
           <input type="text" id="quick-input" placeholder="请输入品种名称或代码，如：螺纹钢 / rb / RB" autocomplete="off">
+          <button type="button" class="clear-btn" data-clear="quick-input" aria-label="清除品种输入" hidden>×</button>
           <button type="button" id="quick-btn" class="btn-calc btn-quick">查询</button>
         </div>
       </div>
